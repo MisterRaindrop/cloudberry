@@ -56,7 +56,7 @@ case $(uname -m) in
 	aarch64) weed_arch=linux_arm64 ;;
 	*) echo "prepare-tests: no SeaweedFS build for $(uname -m)" >&2; exit 1 ;;
 esac
-curl -fsSL --retry 5 --retry-all-errors \
+curl -fsSL --retry 5 --retry-connrefused \
 	"https://github.com/seaweedfs/seaweedfs/releases/download/${SEAWEEDFS_VERSION}/${weed_arch}.tar.gz" |
 	tar -xz -C "$state" weed
 

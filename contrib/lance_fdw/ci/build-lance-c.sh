@@ -52,14 +52,14 @@ case $(uname -m) in
 	aarch64) protoc_arch=aarch_64 ;;
 	*) echo "build-lance-c: no protoc build for $(uname -m)" >&2; exit 1 ;;
 esac
-curl -fsSL --retry 5 --retry-all-errors -o "$work/protoc.zip" \
+curl -fsSL --retry 5 --retry-connrefused -o "$work/protoc.zip" \
 	"https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOC_VERSION}/protoc-${PROTOC_VERSION}-linux-${protoc_arch}.zip"
 unzip -q -o "$work/protoc.zip" -d "$work/protoc" bin/protoc 'include/*'
 export PROTOC=$work/protoc/bin/protoc
 "$PROTOC" --version
 
 export RUSTUP_HOME=$work/rustup CARGO_HOME=$work/cargo
-curl -fsSL --retry 5 --retry-all-errors https://sh.rustup.rs |
+curl -fsSL --retry 5 --retry-connrefused https://sh.rustup.rs |
 	sh -s -- -y --no-modify-path --profile minimal --default-toolchain "$RUST_VERSION"
 export PATH=$CARGO_HOME/bin:$PATH
 rustc --version
