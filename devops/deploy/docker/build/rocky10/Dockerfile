@@ -177,9 +177,12 @@ RUN dnf makecache && \
 # its ABI with Arrow, so the version moves only with a change here.
 # EPEL and CRB carry what the packages depend on (re2, thrift, ...).
 # The repository is left disabled afterwards, as EPEL is.
+# The release package needs nothing from a repository, so it goes in
+# with them all disabled: loading their metadata under QEMU took eight
+# minutes of an arm64 build.
 # --------------------------------------------------------------------
 ARG ARROW_VERSION=26.0.0
-RUN dnf install -y \
+RUN dnf install -y --disablerepo='*' \
         https://packages.apache.org/artifactory/arrow/almalinux/10/apache-arrow-release-latest.rpm && \
     dnf install -y --enablerepo=epel --enablerepo=crb \
         arrow-devel-${ARROW_VERSION}-1.el10 \

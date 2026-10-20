@@ -180,9 +180,12 @@ RUN dnf makecache && \
 # need C++20, which this image's gcc 8 does not have.
 # EPEL and PowerTools carry what the packages depend on (re2, thrift, ...).
 # The repository is left disabled afterwards, as EPEL is.
+# The release package needs nothing from a repository, so it goes in
+# with them all disabled: loading their metadata under QEMU took eight
+# minutes of an arm64 build.
 # --------------------------------------------------------------------
 ARG ARROW_VERSION=22.0.0
-RUN dnf install -y \
+RUN dnf install -y --disablerepo='*' \
         https://packages.apache.org/artifactory/arrow/almalinux/8/apache-arrow-release-latest.rpm && \
     dnf install -y --enablerepo=epel --enablerepo=powertools \
         arrow-devel-${ARROW_VERSION}-1.el8 \
